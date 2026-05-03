@@ -1,6 +1,6 @@
 """NaniGPT tool functions exposed to Gemma 4 via native function calling.
 
-These are plain Python functions with type hints + docstrings — Gemma 4's
+These are plain Python functions with type hints and docstrings. Gemma 4's
 chat template (and HF transformers' `tools=` argument) auto-converts them
 into JSON Schema for the model.
 
@@ -8,8 +8,8 @@ Design rules:
     - Each tool returns a dict so the model can confirm what it did.
     - Each tool is idempotent-friendly: re-calling logs an additional entry
       rather than mutating the prior one.
-    - Severity / urgency vocabularies are constrained (Literal types) so the
-      model can't invent fields.
+    - Severity and urgency vocabularies are constrained (Literal types) so the
+      model cannot invent fields.
 """
 
 from typing import Literal
@@ -31,8 +31,8 @@ def log_pill_change(
     Args:
         day: Day-of-week the slot belongs to (e.g. 'TUE').
         ampm: 'AM' or 'PM' compartment.
-        change: 'taken' (slot went full → empty as expected),
-                'refilled' (empty → full, caregiver topped up),
+        change: 'taken' (slot went from full to empty as expected),
+                'refilled' (empty to full, caregiver topped up),
                 'missed' (slot still full when it should have been taken).
         note: Optional free-text from the caregiver.
 
@@ -60,13 +60,13 @@ def log_incident(
 
     Use 'low' for trend-tracking entries, 'medium' for things to mention at
     next doctor visit, 'high' for things that warrant a same-day clinician
-    call. NaniGPT never decides medical severity for the caregiver — it
+    call. NaniGPT never decides medical severity for the caregiver. It
     records what the caregiver tells it.
 
     Args:
         category: Type of observation.
         detail: Plain-language description (1-3 sentences).
-        severity: 'low' / 'medium' / 'high' as the caregiver judges.
+        severity: 'low', 'medium', or 'high' as the caregiver judges.
         photo_attached: Whether a photo was logged with this incident.
     """
     return storage.append({
@@ -110,12 +110,12 @@ def notify_sibling(
 ) -> dict:
     """Send a notification to other caregivers in the family circle.
 
-    'info'  → batched into the daily digest (quiet)
-    'soon'  → SMS/push within the hour
-    'now'   → immediate alert (bypass quiet hours)
+    'info': batched into the daily digest (quiet)
+    'soon': SMS or push within the hour
+    'now':  immediate alert (bypass quiet hours)
 
-    The actual transport (SMS / push / email) is wired in the production
-    app — this tool just records the intent.
+    The actual transport (SMS, push, email) is wired in the production
+    app. This tool just records the intent.
     """
     return storage.append({
         "category": "sibling_notify",

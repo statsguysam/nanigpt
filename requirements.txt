@@ -1,4 +1,4 @@
-# Runtime — pinned to versions validated during the hackathon
+# Runtime: pinned to versions validated during the hackathon
 torch>=2.8.0
 triton>=3.4.0
 transformers==5.5.0

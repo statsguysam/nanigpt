@@ -1,8 +1,8 @@
 """In-memory caregiver log store for the hackathon prototype.
 
 Production version would use SQLCipher AES-256 (matching SafeVoice's pattern)
-with the encryption key in Android Keystore. For the demo + notebooks we keep
-it as a simple Python dict — same interface, swap implementations later.
+with the encryption key in Android Keystore. For the demo and notebooks we keep
+it as a simple Python dict, same interface, swap implementations later.
 """
 
 from datetime import datetime, timezone
