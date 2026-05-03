@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# Local notebook outputs (keep notebook structure clean for review)
+notebooks/.ipynb_checkpoints/
+
+# Model artifacts (large; keep adapter zip but not extracted)
+adapter/nanigpt_pill_lora/
+*.bin
+*.safetensors
+
+# Local Colab outputs
+nanigpt_pill_lora/
+lora_out/
+outputs/
+
+# Workspace cruft (internal planning, not for the public repo)
+PLAN.md
+VIDEO_SCRIPT.md
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Secrets
+.env
+.env.local
+secrets.json
+
+# Logs
+*.log
+logs/

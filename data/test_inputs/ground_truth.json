@@ -1,0 +1,382 @@
+[
+  {
+    "file": "test2_baseline_full_week.jpg",
+    "scenario": "All slots filled (start of week, just refilled)",
+    "slots": [
+      {
+        "day": "MON",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "MON",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "TUE",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "TUE",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "PM",
+        "state": "filled"
+      }
+    ]
+  },
+  {
+    "file": "test3_three_taken_today.jpg",
+    "scenario": "MON AM/PM and TUE AM taken (3 empty)",
+    "slots": [
+      {
+        "day": "MON",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "MON",
+        "ampm": "PM",
+        "state": "empty"
+      },
+      {
+        "day": "TUE",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "TUE",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "PM",
+        "state": "filled"
+      }
+    ]
+  },
+  {
+    "file": "test4_missed_dose_pattern.jpg",
+    "scenario": "End of week: WED PM mysteriously skipped",
+    "slots": [
+      {
+        "day": "MON",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "MON",
+        "ampm": "PM",
+        "state": "empty"
+      },
+      {
+        "day": "TUE",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "TUE",
+        "ampm": "PM",
+        "state": "empty"
+      },
+      {
+        "day": "WED",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "WED",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "THU",
+        "ampm": "PM",
+        "state": "empty"
+      },
+      {
+        "day": "FRI",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "FRI",
+        "ampm": "PM",
+        "state": "empty"
+      },
+      {
+        "day": "SAT",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "PM",
+        "state": "filled"
+      }
+    ]
+  },
+  {
+    "file": "test5_partial_dose_concern.jpg",
+    "scenario": "MON AM has only 1 pill (looks like she missed one)",
+    "slots": [
+      {
+        "day": "MON",
+        "ampm": "AM",
+        "state": "partial"
+      },
+      {
+        "day": "MON",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "TUE",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "TUE",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "PM",
+        "state": "filled"
+      }
+    ]
+  },
+  {
+    "file": "test6_low_light.jpg",
+    "scenario": "Dim lighting (kitchen at night) \u2014 same content as test1 but harder to read",
+    "slots": [
+      {
+        "day": "MON",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "MON",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "TUE",
+        "ampm": "AM",
+        "state": "empty"
+      },
+      {
+        "day": "TUE",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "WED",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "THU",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "FRI",
+        "ampm": "PM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SAT",
+        "ampm": "PM",
+        "state": "empty"
+      },
+      {
+        "day": "SUN",
+        "ampm": "AM",
+        "state": "filled"
+      },
+      {
+        "day": "SUN",
+        "ampm": "PM",
+        "state": "filled"
+      }
+    ]
+  }
+]

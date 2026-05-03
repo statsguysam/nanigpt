@@ -1,0 +1,30 @@
+# Runtime — pinned to versions validated during the hackathon
+torch>=2.8.0
+triton>=3.4.0
+transformers==5.5.0
+unsloth
+unsloth_zoo>=2026.4.6
+bitsandbytes
+torchvision
+torchcodec
+timm
+pillow
+numpy
+
+# Demo interface
+gradio>=5.0
+pydantic>=2
+
+# Function-calling tools and reports
+python-dateutil
+reportlab          # PDF rendering for the doctor visit report
+
+# Fine-tuning (notebook 05)
+trl
+peft
+accelerate
+datasets
+
+# Notebook environment (optional for local dev)
+jupyter
+ipykernel
