@@ -78,6 +78,28 @@ We expose 5 tools to Gemma 4 via the standard function-calling chat template: `l
 
 Audio input is handled directly by Gemma 4 E4B's multimodal audio capability. No separate STT model. Validated on a 30-second AIFF mock caregiver entry. Transcription quality was near-perfect, and the output was then chained through the agent pipeline to dispatch 5 tool calls (sleep observation, behavior pattern, appetite change, bruise observation, doctor agenda item).
 
+### 4.5 Ollama Deployment
+
+For users who prefer laptop-local deployment over Android, NaniGPT's text reasoning, function-calling agent, and voice journal flows are packaged as a 4-bit quantized GGUF model. The pipeline:
+
+1. Train LoRA adapter via Unsloth on the multimodal Gemma 4 E4B (per section 4.1).
+2. Filter the LoRA to language-model tensors only (588 of 812 trained tensors; vision and audio tensors dropped for the text-only Ollama target).
+3. Strip the multimodal namespace from tensor names so they match Gemma3-style mappings, since Gemma 4's text-only converter class in upstream llama.cpp inherits from Gemma3Model.
+4. Convert the filtered LoRA to GGUF format via llama.cpp's `convert_lora_to_gguf`.
+5. Merge the LoRA into a base Gemma 4 E4B GGUF using `llama-export-lora`.
+6. Quantize the merged model to Q4_K_M (~3.5 GB).
+7. Ship with a Modelfile defining the NaniGPT system prompt and the Gemma 4 chat template.
+
+The resulting model and Modelfile are publicly available at [https://huggingface.co/sammy786/nanigpt-gemma4-e4b-pill-lora-gguf](https://huggingface.co/sammy786/nanigpt-gemma4-e4b-pill-lora-gguf) and run via:
+
+```
+huggingface-cli download sammy786/nanigpt-gemma4-e4b-pill-lora-gguf nanigpt-q4_k_m.gguf Modelfile --local-dir .
+ollama create nanigpt -f Modelfile
+ollama run nanigpt
+```
+
+The pill organizer photo classification still requires the full Python stack while multimodal Gemma 4 GGUF support stabilizes in upstream llama.cpp. The text and agent flows run cleanly via Ollama on a laptop with no internet.
+
 ## 5. Privacy and Safety Design
 
 Family medical data is among the most sensitive personal information that exists. NaniGPT's privacy architecture is built around the principle that nothing should leave the device.
@@ -141,7 +163,7 @@ Total active phone time per day: under 5 minutes. Compare to the 30 plus minutes
 
 **Limitations.** Pill classification accuracy is measured on synthetic data; real-world organizer photos will perform somewhat lower. The pill organizer photo feature is currently optimized for the standard 7-day AM/PM blister-style plastic organizer, which is common in middle-class urban Indian households and standard in Western markets but less common in lower-income or rural households. Households using original blister strips, daily steel dispensers, or other patterns are served by the voice journal and incident log features but not by photo-based medication tracking. The function-calling parser is signature-aware but assumes Gemma 4's specific tool-call format and would need adaptation for other model families. Family-circle SMS transport is stubbed in the prototype; production needs an SMS gateway (Twilio for paid tier, or Android-native SMS for fully-offline operation). The caregiver UI is currently demoed via Gradio. The production target (MediaPipe LLM Inference on Android) is described but not packaged in the submission window.
 
-**Future work.** Blister strip detection. A second-pass model trained on photos of actual pill blister sheets, detecting which cells have been popped, would extend the pill check feature to households that do not use organizers. This would expand accessible target users from an estimated 60 million to 200 million plus globally. Pilot deployment with one Indian NGO partner; collect 200 plus real caregiver-captured pill organizer photos for second-round fine-tuning. Multilingual prompt and tool-output coverage validated for Hindi, Marathi, Telugu, Bengali. Integration with major Electronic Health Record systems (FHIR) for one-tap export to clinician portals. Schedule learning, where the model infers the caregiver's medication schedule from observed photos rather than requiring explicit setup.
+**Future work.** Blister strip detection. A second-pass model trained on photos of actual pill blister sheets, detecting which cells have been popped, would extend the pill check feature to households that do not use organizers. This would expand accessible target users from an estimated 60 million to 200 million plus globally. Native iOS deployment via Cactus for Apple Silicon caregivers, complementing the primary Android via MediaPipe target. Pilot deployment with one Indian NGO partner; collect 200 plus real caregiver-captured pill organizer photos for second-round fine-tuning. Multilingual prompt and tool-output coverage validated for Hindi, Marathi, Telugu, Bengali. Integration with major Electronic Health Record systems (FHIR) for one-tap export to clinician portals. Schedule learning, where the model infers the caregiver's medication schedule from observed photos rather than requiring explicit setup.
 
 ## 10. Acknowledgments
 

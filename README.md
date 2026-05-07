@@ -108,6 +108,22 @@ The reference deployment target is MediaPipe LLM Inference on Android with Gemma
 
 Pre-validated on-device using the official Google AI Edge Gallery Android app. Full Android packaging is on the post-submission roadmap. See section 9 of [WRITEUP.md](WRITEUP.md).
 
+## Run via Ollama (laptop-local)
+
+For laptop-local use, the text and agent flows of NaniGPT are also published as a 4-bit quantized GGUF along with an Ollama Modelfile. The model and Modelfile are hosted on Hugging Face: [sammy786/nanigpt-gemma4-e4b-pill-lora-gguf](https://huggingface.co/sammy786/nanigpt-gemma4-e4b-pill-lora-gguf).
+
+```bash
+# Download the GGUF and Modelfile
+huggingface-cli download sammy786/nanigpt-gemma4-e4b-pill-lora-gguf \
+  nanigpt-q4_k_m.gguf Modelfile --local-dir .
+
+# Create and run via Ollama
+ollama create nanigpt -f Modelfile
+ollama run nanigpt
+```
+
+The pill organizer photo classification still requires the full Python stack while multimodal Gemma 4 GGUF support continues to mature in upstream llama.cpp. The text reasoning, function-calling agent, and voice journal flows all run cleanly via Ollama on a laptop with no internet.
+
 ## Roadmap
 
 Pilot deployment with one Indian NGO partner (ARDSI Pune chapter pending).
