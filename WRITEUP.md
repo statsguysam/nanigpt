@@ -1,6 +1,6 @@
 # NaniGPT: A Private, On-Device Companion for Adult Children Caring for Aging Parents
 
-*Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary). Special Technology lanes: Unsloth, Ollama, llama.cpp.*
+*Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary). Special Technology lanes: Unsloth, Ollama, llama.cpp, Cactus.*
 
 ## 1. Problem Statement
 
@@ -104,6 +104,19 @@ End-to-end validation on an Apple M3 Mac: model loads in 3.7 seconds with all 43
 
 This pipeline is also the basis for our llama.cpp Special Technology Track entry: it represents a demonstrably working implementation of Gemma 4 on resource-constrained hardware, with a documented workaround for the multimodal-LoRA conversion gap that other competitors will likely encounter when attempting the same thing.
 
+### 4.6 Cactus iOS Application with Multi-Model Routing
+
+For the Cactus Special Technology Track, NaniGPT ships a native SwiftUI iOS application built on the Cactus framework (github.com/cactus-compute/cactus). The app is a thin layer over a deliberately designed **ModelRouter** that dispatches caregiver tasks between two Gemma 4 model sizes loaded simultaneously on-device via Cactus:
+
+- Short journal entries, function-call dispatch, and voice transcription route to the smaller fast model.
+- Long multi-incident journal entries, doctor visit report compilation, and weekly sibling digests route to the larger deep model.
+
+Routing decisions are driven by task type and input length heuristics. Each turn surfaces a "Handled by..." label so the routing is visible in the UI, demonstrating exactly the local-first multi-model behaviour that Cactus exists to enable.
+
+Integration details: the C library is built from source via `cactus build --apple`, producing `cactus-ios.xcframework` with separate device and simulator slices. The build script does not ship a Clang `module.modulemap` inside each slice's `cactus.framework/Modules/` directory, so we provide an installer that copies the source `module.modulemap` into both slices before Xcode integration. The Swift wrapper file `Cactus.swift` is added to the project sources alongside the framework. Our `CactusEngine.swift` actor wraps `cactusInit` and `cactusComplete` for each loaded model, exchanging OpenAI-compatible JSON message arrays.
+
+The full iOS source lives in `nanigpt-ios/App/` in the submission repository. Validated end-to-end on iPhone 17 Simulator (iOS 26.4): both models load, the journal flow dispatches structured tool calls, and the routing label visibly changes between fast-path and deep-path turns. Deployment to a physical iPhone is gated only by Apple Developer device registration, not by any technical blocker.
+
 ## 5. Privacy and Safety Design
 
 Family medical data is among the most sensitive personal information that exists. NaniGPT's privacy architecture is built around the principle that nothing should leave the device.
@@ -167,7 +180,7 @@ Total active phone time per day: under 5 minutes. Compare to the 30 plus minutes
 
 **Limitations.** Pill classification accuracy is measured on synthetic data; real-world organizer photos will perform somewhat lower. The pill organizer photo feature is currently optimized for the standard 7-day AM/PM blister-style plastic organizer, which is common in middle-class urban Indian households and standard in Western markets but less common in lower-income or rural households. Households using original blister strips, daily steel dispensers, or other patterns are served by the voice journal and incident log features but not by photo-based medication tracking. The function-calling parser is signature-aware but assumes Gemma 4's specific tool-call format and would need adaptation for other model families. Family-circle SMS transport is stubbed in the prototype; production needs an SMS gateway (Twilio for paid tier, or Android-native SMS for fully-offline operation). The caregiver UI is currently demoed via Gradio. The production target (MediaPipe LLM Inference on Android) is described but not packaged in the submission window.
 
-**Future work.** Blister strip detection. A second-pass model trained on photos of actual pill blister sheets, detecting which cells have been popped, would extend the pill check feature to households that do not use organizers. This would expand accessible target users from an estimated 60 million to 200 million plus globally. Native iOS deployment via Cactus for Apple Silicon caregivers, complementing the primary Android via MediaPipe target. Pilot deployment with one Indian NGO partner; collect 200 plus real caregiver-captured pill organizer photos for second-round fine-tuning. Multilingual prompt and tool-output coverage validated for Hindi, Marathi, Telugu, Bengali. Integration with major Electronic Health Record systems (FHIR) for one-tap export to clinician portals. Schedule learning, where the model infers the caregiver's medication schedule from observed photos rather than requiring explicit setup.
+**Future work.** Blister strip detection. A second-pass model trained on photos of actual pill blister sheets, detecting which cells have been popped, would extend the pill check feature to households that do not use organizers. This would expand accessible target users from an estimated 60 million to 200 million plus globally. Pilot deployment with one Indian NGO partner; collect 200 plus real caregiver-captured pill organizer photos for second-round fine-tuning. Multilingual prompt and tool-output coverage validated for Hindi, Marathi, Telugu, Bengali. Integration with major Electronic Health Record systems (FHIR) for one-tap export to clinician portals. Schedule learning, where the model infers the caregiver's medication schedule from observed photos rather than requiring explicit setup. App Store distribution of the iOS Cactus client beyond simulator validation, gated currently only by Apple Developer device registration.
 
 ## 10. Acknowledgments
 
