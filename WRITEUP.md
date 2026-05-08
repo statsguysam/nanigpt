@@ -1,6 +1,6 @@
 # NaniGPT: A Private, On-Device Companion for Adult Children Caring for Aging Parents
 
-*Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary), Special Tech: Unsloth.*
+*Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary). Special Technology lanes: Unsloth, Ollama, llama.cpp.*
 
 ## 1. Problem Statement
 
@@ -42,7 +42,7 @@ Multimodality is the workflow. The caregiver's day is photos (pill organizer, br
 
 Native function calling enables agentic action. Most LLM consumer apps are chatbots that respond to messages. NaniGPT is an agent. One input produces structured side effects across the caregiver log, the doctor agenda, and the family circle. Gemma 4's native tool-calling format makes this clean and reliable.
 
-Apache 2.0 license enables NGO distribution. This is a structural moat that closed-AI caregiving products cannot match. The Alzheimer's Association reaches more than 4 million caregivers in the US. AARP reaches 38 million members. HelpAge International operates in over 40 countries. ARDSI operates in India. None of these can adopt a closed-AI app, because Google or OpenAI would charge per-call API fees that scale with patient count. They can adopt and white-label an Apache-2.0 on-device app. Distribution at NGO scale is what turns NaniGPT from a hackathon project into a global utility.
+Apache 2.0 license enables NGO distribution. This is a structural moat that closed-source caregiving products cannot match. The Alzheimer's Association reaches more than 4 million caregivers in the US. AARP reaches 38 million members. HelpAge International operates in over 40 countries. ARDSI operates in India. None of these can adopt a closed-source product, because the model provider would charge per-call API fees that scale with patient count. They can adopt and white-label an Apache-2.0 on-device app. Distribution at NGO scale is what turns NaniGPT from a hackathon project into a global utility.
 
 ## 4. Technical Results
 
@@ -78,13 +78,15 @@ We expose 5 tools to Gemma 4 via the standard function-calling chat template: `l
 
 Audio input is handled directly by Gemma 4 E4B's multimodal audio capability. No separate STT model. Validated on a 30-second AIFF mock caregiver entry. Transcription quality was near-perfect, and the output was then chained through the agent pipeline to dispatch 5 tool calls (sleep observation, behavior pattern, appetite change, bruise observation, doctor agenda item).
 
-### 4.5 Ollama Deployment
+### 4.5 llama.cpp Pipeline and Ollama Deployment
 
-For users who prefer laptop-local deployment over Android, NaniGPT's text reasoning, function-calling agent, and voice journal flows are packaged as a 4-bit quantized GGUF model. The pipeline:
+For users who prefer laptop-local deployment over Android, NaniGPT's text reasoning, function-calling agent, and voice journal flows are packaged as a 4-bit quantized GGUF model that runs natively via llama.cpp (and consequently via Ollama on top of llama.cpp).
+
+The non-trivial part of getting here is the path from a multimodal-Gemma-4 LoRA to a text-only GGUF. As of the submission window, upstream llama.cpp does not yet support converting multimodal Gemma 4 LoRA adapters end-to-end. Our LoRA was trained against `Gemma4ForConditionalGeneration`, which nests the language model under `model.language_model.*`, but llama.cpp's tensor-name mapper for Gemma 4 expects the flat Gemma3-style `model.layers.*` namespace. We worked around this by (a) filtering the LoRA tensors to drop the vision and audio modules (588 of 812 trained tensors retained; vision tower at 224, audio tower at 0, multi-modal projector at 0), (b) renaming the remaining tensors in-place to strip `model.language_model.` from the path, and (c) constructing a stripped-down text-only base config that drops `vision_config` and `audio_config` while keeping the multimodal architecture string `Gemma4ForConditionalGeneration` (the only string Gemma4Model registers under in upstream llama.cpp, which inherits from Gemma3Model). With those three changes in place, the standard llama.cpp pipeline runs cleanly:
 
 1. Train LoRA adapter via Unsloth on the multimodal Gemma 4 E4B (per section 4.1).
-2. Filter the LoRA to language-model tensors only (588 of 812 trained tensors; vision and audio tensors dropped for the text-only Ollama target).
-3. Strip the multimodal namespace from tensor names so they match Gemma3-style mappings, since Gemma 4's text-only converter class in upstream llama.cpp inherits from Gemma3Model.
+2. Filter the LoRA to language-model tensors only (588 of 812 trained tensors).
+3. Strip the multimodal namespace from tensor names; build text-only base config.
 4. Convert the filtered LoRA to GGUF format via llama.cpp's `convert_lora_to_gguf`.
 5. Merge the LoRA into a base Gemma 4 E4B GGUF using `llama-export-lora`.
 6. Quantize the merged model to Q4_K_M (~3.5 GB).
@@ -98,7 +100,9 @@ ollama create nanigpt -f Modelfile
 ollama run nanigpt
 ```
 
-The pill organizer photo classification still requires the full Python stack while multimodal Gemma 4 GGUF support stabilizes in upstream llama.cpp. The text and agent flows run cleanly via Ollama on a laptop with no internet.
+End-to-end validation on an Apple M3 Mac: model loads in 3.7 seconds with all 43 layers offloaded to Metal, first response generates in roughly 16 seconds. Output is on-character (warm tone, structured log entries, refusal of medical advice, emotional support) and matches the Modelfile system prompt cleanly. Pill organizer photo classification still requires the full Python stack while multimodal Gemma 4 GGUF support stabilizes in upstream llama.cpp; the text and agent flows run on a laptop with no internet.
+
+This pipeline is also the basis for our llama.cpp Special Technology Track entry: it represents a demonstrably working implementation of Gemma 4 on resource-constrained hardware, with a documented workaround for the multimodal-LoRA conversion gap that other competitors will likely encounter when attempting the same thing.
 
 ## 5. Privacy and Safety Design
 
@@ -129,7 +133,7 @@ NaniGPT is designed for B2B2C distribution through nonprofits rather than direct
 * Dementia Australia: national caregiver support
 * Local NGOs and women's health collectives in low-resource regions
 
-The Apache 2.0 license enables each of these organizations to white-label, brand, localize, and distribute NaniGPT at zero marginal cost. No closed-AI caregiving product can offer this. This is the structural difference between NaniGPT and the existing competitive landscape.
+The Apache 2.0 license enables each of these organizations to white-label, brand, localize, and distribute NaniGPT at zero marginal cost. No closed-source caregiving product can offer this. This is the structural difference between NaniGPT and the existing competitive landscape.
 
 Localization roadmap. Initial release will support English, Hindi, Marathi, Telugu. Gemma 4's multilingual coverage extends naturally to 30 plus additional languages without retraining.
 
@@ -175,4 +179,4 @@ We acknowledge the prior Gemma 3n Impact Challenge winners, particularly the dev
 
 Full source, training data, fine-tuning notebooks, eval scripts, and the LoRA adapter are available at: **[github.com/statsguysam/nanigpt](https://github.com/statsguysam/nanigpt)**
 
-Released under Apache License 2.0.
+Released under Apache License 2.0. Per Section 2.5 of the Gemma 4 Good Hackathon Official Competition Rules, in the event this submission is selected as a Prize winner, the source code used to generate the winning Submission will additionally be licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) to the Competition Sponsor. The Apache 2.0 license remains the primary public license for ongoing redistribution and NGO white-labeling.

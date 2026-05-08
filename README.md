@@ -106,7 +106,7 @@ jupyter notebook notebooks/05_finetune_pill_detection.ipynb
 
 The reference deployment target is MediaPipe LLM Inference on Android with Gemma 4 E4B in 4-bit quantization. The Gradio interface in this repo is for evaluator interactivity and reproducible demonstration. It is not the production form factor.
 
-Pre-validated on-device using the official Google AI Edge Gallery Android app. Full Android packaging is on the post-submission roadmap. See section 9 of [WRITEUP.md](WRITEUP.md).
+Pre-validated on-device using Google's on-device runtime preview app for Android. Full Android packaging is on the post-submission roadmap. See section 9 of [WRITEUP.md](WRITEUP.md).
 
 ## Run via Ollama (laptop-local)
 
@@ -143,6 +143,8 @@ Built on [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-t
 ## License
 
 Released under the [Apache License 2.0](LICENSE). You may use, modify, and distribute this code, including for commercial purposes, provided you preserve the copyright and license notice. NGO redistribution and white-labeling are explicitly intended use cases.
+
+Per Section 2.5 of the Gemma 4 Good Hackathon Official Competition Rules, in the event this submission is selected as a Prize winner, the source code used to generate the winning Submission will additionally be licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) to the Competition Sponsor. The Apache 2.0 license remains the primary public license for ongoing redistribution.
 
 ## Contact
 
