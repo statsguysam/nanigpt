@@ -2,6 +2,10 @@
 
 *Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary).*
 
+**Video:** [https://youtu.be/1IGi8ak73iE](https://youtu.be/1IGi8ak73iE)
+**Repository:** [github.com/statsguysam/nanigpt](https://github.com/statsguysam/nanigpt)
+**Model:** [huggingface.co/sammy786/nanigpt-gemma4-e4b-pill-lora-gguf](https://huggingface.co/sammy786/nanigpt-gemma4-e4b-pill-lora-gguf)
+
 ## 1. Problem Statement
 
 Roughly 60 million people in the world today live with dementia, and that number is doubling every 20 years. About 70 percent of their care happens at home, performed largely by their adult children. Most often this is the daughter, who is also working a full-time job and raising her own children. The average primary caregiver provides 21 hours per week of care across an average duration of 4 to 8 years; 40 to 70 percent develop clinically significant depression; the unpaid labor value globally runs into the hundreds of billions of dollars per year.

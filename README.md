@@ -4,6 +4,8 @@ A private, on-device companion for adult children caring for aging parents with 
 
 NaniGPT runs entirely on a phone. No cloud. No data leaves the device. Built on [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) and released under Apache License 2.0 so it can be distributed at NGO scale.
 
+**Video:** [https://youtu.be/1IGi8ak73iE](https://youtu.be/1IGi8ak73iE)
+
 > Submitted to [The Gemma 4 Good Hackathon](https://www.kaggle.com/competitions/gemma-4-good-hackathon) (Kaggle, Google DeepMind, May 2026).
 
 ## What it does
