@@ -5,10 +5,10 @@ chat template (and HF transformers' `tools=` argument) auto-converts them
 into JSON Schema for the model.
 
 Design rules:
-    - Each tool returns a dict so the model can confirm what it did.
-    - Each tool is idempotent-friendly: re-calling logs an additional entry
+ - Each tool returns a dict so the model can confirm what it did.
+ - Each tool is idempotent-friendly: re-calling logs an additional entry
       rather than mutating the prior one.
-    - Severity and urgency vocabularies are constrained (Literal types) so the
+ - Severity and urgency vocabularies are constrained (Literal types) so the
       model cannot invent fields.
 """
 

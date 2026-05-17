@@ -164,8 +164,8 @@ struct LogView: View {
     @EnvironmentObject var router: ModelRouter
 
     private var shareText: String {
-        let header = "NaniGPT — Today's Caregiving Log\n\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .none))\n"
-        let divider = String(repeating: "—", count: 30)
+        let header = "NaniGPT - Today's Caregiving Log\n\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .none))\n"
+        let divider = String(repeating: " - ", count: 30)
         let entries = router.log.entries.map { "[\($0.timeLabel)] \($0.title): \($0.body)" }
         return header + divider + "\n" + entries.joined(separator: "\n") + "\n" + divider + "\nSent from NaniGPT"
     }
@@ -304,11 +304,11 @@ struct DoctorPrepView: View {
     private var shareableReport: String {
         let date = DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .none)
         return """
-        NaniGPT — Caregiver Report
+        NaniGPT - Caregiver Report
         \(date) (last \(days) days)
-        \(String(repeating: "—", count: 30))
+        \(String(repeating: " - ", count: 30))
         \(report)
-        \(String(repeating: "—", count: 30))
+        \(String(repeating: " - ", count: 30))
         Compiled by \(lastModelUsed)
         Sent from NaniGPT
         """

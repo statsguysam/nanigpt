@@ -1,4 +1,4 @@
-# NaniGPT iOS — Cactus Special Technology Track
+# NaniGPT iOS - Cactus Special Technology Track
 
 Native SwiftUI iOS application that loads two Gemma 4 models simultaneously on-device via the [Cactus](https://github.com/cactus-compute/cactus) C runtime and routes caregiver tasks between them based on input length and task type.
 
@@ -27,8 +27,8 @@ The Xcode project file and signing configuration are intentionally not included.
 
 `ModelRouter.swift` dispatches each caregiver turn to one of two Gemma 4 instances loaded simultaneously through Cactus:
 
-- **Fast path** — short journal entries, voice transcription, function-call dispatch route to the smaller Gemma 4 E2B model. Sub-second response latency.
-- **Deep path** — long multi-incident entries, doctor visit report compilation, and weekly sibling digests route to the larger Gemma 4 E4B model.
+- **Fast path** - short journal entries, voice transcription, function-call dispatch route to the smaller Gemma 4 E2B model. Sub-second response latency.
+- **Deep path** - long multi-incident entries, doctor visit report compilation, and weekly sibling digests route to the larger Gemma 4 E4B model.
 
 Each model response surfaces a `"Handled by Gemma 4 E2B (fast path)"` or `"Compiled by Gemma 4 E4B (deep path)"` label in the UI so routing decisions are visible during evaluation.
 
@@ -66,4 +66,4 @@ The iOS deployment uses Keychain with Secure Enclave backing for the master encr
 
 ## Special Technology Track: Cactus
 
-This iOS app is the Cactus track entry. Cactus exists to enable exactly this pattern — multiple on-device LLMs orchestrated through a Swift actor, with no internet, no cloud, no fallback to a hosted API. The `Cactus.swift` bindings file and `CactusEngine.swift` actor implementation are the integration layer; `ModelRouter.swift` is the orchestration logic on top.
+This iOS app is the Cactus track entry. Cactus exists to enable exactly this pattern - multiple on-device LLMs orchestrated through a Swift actor, with no internet, no cloud, no fallback to a hosted API. The `Cactus.swift` bindings file and `CactusEngine.swift` actor implementation are the integration layer; `ModelRouter.swift` is the orchestration logic on top.

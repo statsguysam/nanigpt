@@ -40,7 +40,7 @@ final class ModelRouter: ObservableObject {
         let e2bModelName = "gemma-4-e2b-it"
 
         bootstrapStatus = "Loading Gemma 4 E2B"
-        NSLog("[NaniGPT] Bootstrap starting — loading \(e2bModelName)")
+        NSLog("[NaniGPT] Bootstrap starting - loading \(e2bModelName)")
         do {
             smallEngine = try await CactusEngine.load(
                 modelName: e2bModelName,
@@ -50,7 +50,7 @@ final class ModelRouter: ObservableObject {
             largeEngine = smallEngine
             ready = true
             bootstrapStatus = "Gemma 4 E2B loaded on-device"
-            NSLog("[NaniGPT] Bootstrap complete — model ready")
+            NSLog("[NaniGPT] Bootstrap complete - model ready")
         } catch {
             bootstrapStatus = "Model load failed: \(error.localizedDescription)"
             NSLog("[NaniGPT] Bootstrap FAILED: \(error)")
@@ -87,7 +87,7 @@ final class ModelRouter: ObservableObject {
         // the response but isn't required for logging.
         if hasImage {
             let photoCalls = Self.inferToolCallsFromText(text, hasPhoto: true)
-            NSLog("[NaniGPT] Photo path — keyword calls: \(photoCalls.count)")
+            NSLog("[NaniGPT] Photo path - keyword calls: \(photoCalls.count)")
             for c in photoCalls { log.apply(c) }
 
             let imageBase64 = imageData?.base64EncodedString()
@@ -114,14 +114,14 @@ final class ModelRouter: ObservableObject {
 
         let prompt = Prompts.journalPrompt(for: text)
         let raw = await engine.generate(prompt: prompt, maxTokens: 512)
-        NSLog("[NaniGPT] Text path — model raw (\(raw.count) chars): \(raw.prefix(300))")
+        NSLog("[NaniGPT] Text path - model raw (\(raw.count) chars): \(raw.prefix(300))")
         let modelCalls = ToolCallParser.parse(raw, tools: Tools.all)
-        NSLog("[NaniGPT] Text path — model parsed \(modelCalls.count) tool calls")
+        NSLog("[NaniGPT] Text path - model parsed \(modelCalls.count) tool calls")
 
         var calls = modelCalls
         if calls.isEmpty {
             let keywordCalls = Self.inferToolCallsFromText(text, hasPhoto: false)
-            NSLog("[NaniGPT] Text path — keyword fallback produced \(keywordCalls.count)")
+            NSLog("[NaniGPT] Text path - keyword fallback produced \(keywordCalls.count)")
             calls = keywordCalls
         }
 
@@ -178,7 +178,7 @@ final class ModelRouter: ObservableObject {
             ]))
             if hasMissed {
                 calls.append(ToolCall(toolName: "add_to_doctor_visit", arguments: [
-                    "item": "Missed medication — \(dayMatch) \(ampm)", "priority": "important"
+                    "item": "Missed medication - \(dayMatch) \(ampm)", "priority": "important"
                 ]))
             }
         }
@@ -186,11 +186,11 @@ final class ModelRouter: ObservableObject {
         if hasSpill {
             calls.append(ToolCall(toolName: "log_incident", arguments: [
                 "category": "medication spill",
-                "detail": hasPhoto ? "Pills found outside organizer — photo attached" : "Pills spilled from organizer",
+                "detail": hasPhoto ? "Pills found outside organizer - photo attached" : "Pills spilled from organizer",
                 "severity": "medium", "photo_attached": hasPhoto ? "true" : "false"
             ]))
             calls.append(ToolCall(toolName: "add_to_doctor_visit", arguments: [
-                "item": "Medication handling difficulty — pills spilled from organizer",
+                "item": "Medication handling difficulty - pills spilled from organizer",
                 "priority": "important"
             ]))
         }
@@ -201,7 +201,7 @@ final class ModelRouter: ObservableObject {
                 "detail": text, "severity": "medium", "photo_attached": hasPhoto ? "true" : "false"
             ]))
             calls.append(ToolCall(toolName: "add_to_doctor_visit", arguments: [
-                "item": hasPhoto ? "New physical observation — photo attached" : "New physical observation reported",
+                "item": hasPhoto ? "New physical observation - photo attached" : "New physical observation reported",
                 "priority": "important"
             ]))
         }
@@ -295,9 +295,9 @@ final class ModelRouter: ObservableObject {
                     : (isHindi ? "शाम" : isSpanish ? "tarde" : "evening")
                 let change = call.arguments["change"] ?? "logged"
                 if change == "missed" {
-                    if isHindi { parts.append("\(day) \(ampm) की दवाई छूटी — डॉक्टर के लिए नोट किया।") }
-                    else if isSpanish { parts.append("Medicamento de \(day) \(ampm) faltante — anotado para el doctor.") }
-                    else { parts.append("\(day) \(ampm) medication missed — noted for the doctor.") }
+                    if isHindi { parts.append("\(day) \(ampm) की दवाई छूटी - डॉक्टर के लिए नोट किया।") }
+                    else if isSpanish { parts.append("Medicamento de \(day) \(ampm) faltante - anotado para el doctor.") }
+                    else { parts.append("\(day) \(ampm) medication missed - noted for the doctor.") }
                 } else {
                     if isHindi { parts.append("\(day) \(ampm) की दवाई लॉग की गई।") }
                     else if isSpanish { parts.append("Medicamento de \(day) \(ampm) registrado.") }
@@ -313,9 +313,9 @@ final class ModelRouter: ObservableObject {
                         ? (sev == "high" ? "alta" : sev == "medium" ? "media" : "baja")
                         : sev
                 let short = detail.count > 60 ? String(detail.prefix(57)) + "..." : detail
-                if isHindi { parts.append("\(cat) दर्ज किया (\(sevText) प्राथमिकता)\(short.isEmpty ? "" : " — \(short)")") }
-                else if isSpanish { parts.append("\(cat.capitalized) registrado (prioridad \(sevText))\(short.isEmpty ? "" : " — \(short)")") }
-                else { parts.append("\(cat.capitalized) logged (\(sevText) priority)\(short.isEmpty ? "" : " — \(short)")") }
+                if isHindi { parts.append("\(cat) दर्ज किया (\(sevText) प्राथमिकता)\(short.isEmpty ? "" : " - \(short)")") }
+                else if isSpanish { parts.append("\(cat.capitalized) registrado (prioridad \(sevText))\(short.isEmpty ? "" : " - \(short)")") }
+                else { parts.append("\(cat.capitalized) logged (\(sevText) priority)\(short.isEmpty ? "" : " - \(short)")") }
             case "add_to_doctor_visit":
                 let item = call.arguments["item"] ?? "an item"
                 if isHindi { parts.append("डॉक्टर के लिए कतार में: \(item)") }

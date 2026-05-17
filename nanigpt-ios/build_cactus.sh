@@ -3,7 +3,7 @@
 # Single-shot script that produces apple/cactus-ios.xcframework for the iOS app.
 # Run this from your Mac's Terminal:
 #
-#   bash "/Users/salimshaikh/Documents/Claude/Projects/Gemma Kaggle Hack/build_cactus.sh"
+#   bash "./build_cactus.sh"
 #
 # Time: 5-15 minutes depending on your Mac's CPU.
 
