@@ -1,0 +1,16 @@
+# macOS / Xcode
+.DS_Store
+xcuserdata/
+*.xcuserstate
+
+# Cactus framework (rebuild via build_cactus.sh)
+cactus-ios.xcframework/
+*.framework/
+
+# Model files (download from HuggingFace per README)
+Models/*.gguf
+*.gguf
+
+# Build artifacts
+build/
+DerivedData/
