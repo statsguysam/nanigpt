@@ -32,7 +32,7 @@ LoRA fine-tuning lifted pill detection from 78 percent to 99.5 percent per-slot 
 
 A differential pipeline backs the pill detection. Rather than trusting single-photo absolute classification, NaniGPT computes day-over-day diffs in pure Python from two single-photo classifications. This is robust to lighting and angle variation in real-world phone use.
 
-The privacy architecture is built around the principle that nothing should leave the device. Storage uses SQLCipher AES-256 with the master key in Android Keystore, following the pattern established by previous Gemma 3n hackathon winners. No analytics, no telemetry, no third-party SDKs.
+The privacy architecture is built around the principle that nothing should leave the device. Storage uses SQLCipher AES-256 with the master key in Android Keystore (hardware-backed where available). The iOS deployment uses Keychain with Secure Enclave backing. No analytics, no telemetry, no third-party SDKs.
 
 Released under Apache 2.0 so partner organizations (Alzheimer's Association, AARP, HelpAge International, ARDSI, Dementia Australia) can white-label and distribute without per-call API fees.
 
@@ -128,7 +128,7 @@ Schedule learning. The model would infer the medication schedule from observed p
 
 ## Acknowledgments
 
-Built on [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) (Google DeepMind) and [Unsloth](https://github.com/unslothai/unsloth) (Daniel Han et al.). Demo interface: [Gradio](https://gradio.app/). The privacy architecture follows the pattern established by SafeVoice and the prior winners of the Gemma 3n Impact Challenge.
+Built on [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) (Google DeepMind), [Unsloth](https://github.com/unslothai/unsloth) (Daniel Han et al.) for LoRA fine-tuning, [Cactus](https://github.com/cactus-compute/cactus) for the iOS multi-model runtime, and [llama.cpp](https://github.com/ggerganov/llama.cpp) plus [Ollama](https://ollama.com) for laptop-local deployment.
 
 ## License
 

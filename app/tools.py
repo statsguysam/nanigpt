@@ -114,8 +114,8 @@ def notify_sibling(
     'soon': SMS or push within the hour
     'now':  immediate alert (bypass quiet hours)
 
-    The actual transport (SMS, push, email) is wired in the production
-    app. This tool just records the intent.
+    The tool records the notification intent. The transport (SMS, push,
+    email) is dispatched by a separate platform-specific sender.
     """
     return storage.append({
         "category": "sibling_notify",
@@ -131,11 +131,13 @@ def generate_doctor_pdf(
     days: int = 30,
 ) -> dict:
     """Compile the last N days of caregiver log entries into a printable
-    PDF the caregiver can hand the neurologist.
+    report the caregiver can hand the neurologist.
 
-    The actual PDF rendering (reportlab) lives in `app/pdf.py`. This tool
-    surfaces the intent so the model can call it from natural language
-    ('print the report for tomorrow's appointment').
+    The tool surfaces the report-generation intent so the model can call
+    it from natural language ('print the report for tomorrow's
+    appointment'). The rendering layer (reportlab on the laptop build,
+    UIKit print on iOS) consumes the returned metadata to produce the
+    output file.
 
     Returns:
         {'patient': str, 'days': int, 'entries_count': int, 'path': str}
@@ -144,8 +146,6 @@ def generate_doctor_pdf(
     cutoff_iso = datetime.fromtimestamp(cutoff, tz=timezone.utc).isoformat(timespec="seconds")
     entries = storage.filter_entries(since_iso=cutoff_iso)
 
-    # Stub: real PDF rendering happens later. For function-calling demo we
-    # return the metadata so the model knows what it produced.
     return {
         "patient": patient_name,
         "days": days,

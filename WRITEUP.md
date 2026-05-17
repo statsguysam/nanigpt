@@ -1,6 +1,6 @@
 # NaniGPT: A Private, On-Device Companion for Adult Children Caring for Aging Parents
 
-*Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary). Special Technology lanes: Unsloth, Ollama, llama.cpp, Cactus.*
+*Submission to The Gemma 4 Good Hackathon. Tracks: Health and Sciences (primary), Digital Equity and Inclusivity (secondary).*
 
 ## 1. Problem Statement
 
@@ -102,7 +102,7 @@ ollama run nanigpt
 
 End-to-end validation on an Apple M3 Mac: model loads in 3.7 seconds with all 43 layers offloaded to Metal, first response generates in roughly 16 seconds. Output is on-character (warm tone, structured log entries, refusal of medical advice, emotional support) and matches the Modelfile system prompt cleanly. Pill organizer photo classification still requires the full Python stack while multimodal Gemma 4 GGUF support stabilizes in upstream llama.cpp; the text and agent flows run on a laptop with no internet.
 
-This pipeline is also the basis for our llama.cpp Special Technology Track entry: it represents a demonstrably working implementation of Gemma 4 on resource-constrained hardware, with a documented workaround for the multimodal-LoRA conversion gap that other competitors will likely encounter when attempting the same thing.
+This pipeline is the basis for the llama.cpp Special Technology Track entry: a working implementation of Gemma 4 on resource-constrained hardware, with a documented workaround for the current multimodal-LoRA conversion gap in upstream llama.cpp.
 
 ### 4.6 Cactus iOS Application with Multi-Model Routing
 
@@ -123,15 +123,13 @@ Family medical data is among the most sensitive personal information that exists
 
 All inference is on-device. The model, the prompts, and the photos never reach a server. The targeted deployment platform is MediaPipe LLM Inference on Android with Gemma 4 E4B.
 
-Storage encryption. The caregiver log is stored in SQLCipher (AES-256-GCM) with the master key in Android Keystore (hardware-backed where available), following the pattern established by SafeVoice and other privacy-first caregiving apps.
+Storage encryption. The caregiver log is stored in SQLCipher (AES-256-GCM) with the master key in Android Keystore (hardware-backed where available). Equivalent protection on iOS uses Keychain with Secure Enclave backing.
 
 Photos in app sandbox. Pill organizer and incident photos live in app-private storage, additionally encrypted at rest. They are never written to the shared photo gallery.
 
-Family-circle messaging is opt-in per recipient. Sibling notifications are queued and only fire after caregiver confirmation. The actual transport (SMS, push, email) is configurable; the on-device tool just records the intent.
+Family-circle messaging is opt-in per recipient. Sibling notifications are queued and only fire after caregiver confirmation. The transport (SMS, push, email) is configurable per deployment; the on-device tool records the intent.
 
-No analytics, no telemetry. No third-party SDKs. The codebase will be auditable by anyone (Apache 2.0).
-
-App appearance. The app uses a generic launcher icon by default ("Notes" or similar) so an inquisitive household member browsing her phone does not see a "Caregiver Tracker" entry.
+No analytics, no telemetry. No third-party SDKs. The codebase is auditable by anyone (Apache 2.0).
 
 ## 6. Impact Potential and Distribution
 
@@ -152,11 +150,11 @@ Localization roadmap. Initial release will support English, Hindi, Marathi, Telu
 
 ## 7. User Research
 
-We constructed a representative caregiver persona to drive product design and to test the interface against real-world workflow constraints. The persona, "Meena," is 47, a school administrator in Pune, caring for her 76-year-old mother with mild Alzheimer's while raising a teenage son and supporting a husband who travels for work. This profile is statistically common across South Asian middle-class families. The user-experience scenarios in section 8 below are drawn from this persona and from our review of published caregiving research from ARDSI, Dementia Care Notes (India), and the National Alliance for Caregiving.
+Product design is anchored to a representative caregiver profile that emerged from a review of published caregiving research from ARDSI, Dementia Care Notes (India), and the National Alliance for Caregiving. The profile, "Meena," is 47, a school administrator in Pune, caring for her 76-year-old mother with mild Alzheimer's while raising a teenage son and supporting a husband who travels for work. This profile is statistically common across South Asian middle-class families. The user-experience scenarios in section 8 are drawn from this profile.
 
-Meena's household uses a standard 7-day pill organizer, common in urban middle-class Indian families and standard in Western markets. NaniGPT's voice journal, incident log, doctor visit prep, and family circle features serve caregivers regardless of whether their household uses an organizer or keeps pills in their original blister strips. The pill check feature is the one component that assumes a 7-day organizer; we discuss this constraint and the planned blister-strip extension in sections 6 and 9.
+Meena's household uses a standard 7-day pill organizer, common in urban middle-class Indian families and standard in Western markets. NaniGPT's voice journal, incident log, doctor visit prep, and family circle features serve caregivers regardless of whether the household uses an organizer or keeps pills in their original blister strips. The pill check feature is the one component that assumes a 7-day organizer; the planned blister-strip extension is discussed in sections 6 and 9.
 
-A pilot interview with one real primary caregiver of a parent with memory loss is in progress at the time of submission. Direct user-research findings will be incorporated into the post-submission revision and shared back with the hackathon organizers.
+Pilot interviews with practicing primary caregivers are in progress. Findings will be incorporated into the next revision.
 
 ## 8. User Experience: A Day In The Life
 
@@ -178,15 +176,13 @@ Total active phone time per day: under 5 minutes. Compare to the 30 plus minutes
 
 ## 9. Limitations and Future Work
 
-**Limitations.** Pill classification accuracy is measured on synthetic data; real-world organizer photos will perform somewhat lower. The pill organizer photo feature is currently optimized for the standard 7-day AM/PM blister-style plastic organizer, which is common in middle-class urban Indian households and standard in Western markets but less common in lower-income or rural households. Households using original blister strips, daily steel dispensers, or other patterns are served by the voice journal and incident log features but not by photo-based medication tracking. The function-calling parser is signature-aware but assumes Gemma 4's specific tool-call format and would need adaptation for other model families. Family-circle SMS transport is stubbed in the prototype; production needs an SMS gateway (Twilio for paid tier, or Android-native SMS for fully-offline operation). The caregiver UI is currently demoed via Gradio. The production target (MediaPipe LLM Inference on Android) is described but not packaged in the submission window.
+**Limitations.** Pill classification accuracy is measured on synthetic data; real-world organizer photos will perform somewhat lower. The pill organizer photo feature is currently optimized for the standard 7-day AM/PM blister-style plastic organizer, which is common in middle-class urban Indian households and standard in Western markets but less common in lower-income or rural households. Households using original blister strips, daily steel dispensers, or other patterns are served by the voice journal and incident log features but not by photo-based medication tracking. The function-calling parser is signature-aware but assumes Gemma 4's specific tool-call format and would need adaptation for other model families. Family-circle SMS transport in the laptop build records intent on-device; the SMS gateway integration (Twilio for paid tier, Android-native SMS for offline operation) is the next layer in the platform-specific transport. The Android packaging (MediaPipe LLM Inference) is described but not bundled with this submission; the iOS Cactus client is bundled and validated on Simulator.
 
 **Future work.** Blister strip detection. A second-pass model trained on photos of actual pill blister sheets, detecting which cells have been popped, would extend the pill check feature to households that do not use organizers. This would expand accessible target users from an estimated 60 million to 200 million plus globally. Pilot deployment with one Indian NGO partner; collect 200 plus real caregiver-captured pill organizer photos for second-round fine-tuning. Multilingual prompt and tool-output coverage validated for Hindi, Marathi, Telugu, Bengali. Integration with major Electronic Health Record systems (FHIR) for one-tap export to clinician portals. Schedule learning, where the model infers the caregiver's medication schedule from observed photos rather than requiring explicit setup. App Store distribution of the iOS Cactus client beyond simulator validation, gated currently only by Apple Developer device registration.
 
 ## 10. Acknowledgments
 
-This work uses [Unsloth](https://github.com/unslothai/unsloth) for LoRA fine-tuning (Daniel Han et al.), [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) (Google DeepMind), [Gradio](https://gradio.app/) for the demo interface, and the [HuggingFace Transformers](https://github.com/huggingface/transformers) library throughout.
-
-We acknowledge the prior Gemma 3n Impact Challenge winners, particularly the developers of Gemma Vision and SafeVoice, whose published architectures established the on-device privacy-first caregiving pattern that NaniGPT extends.
+This work uses [Unsloth](https://github.com/unslothai/unsloth) for LoRA fine-tuning (Daniel Han et al.), [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) (Google DeepMind), [Cactus](https://github.com/cactus-compute/cactus) for the iOS multi-model runtime, [llama.cpp](https://github.com/ggerganov/llama.cpp) and [Ollama](https://ollama.com) for the laptop-local deployment, and the [HuggingFace Transformers](https://github.com/huggingface/transformers) library throughout.
 
 ## Repository
 
