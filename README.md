@@ -44,18 +44,12 @@ A live Gradio share URL was published with the hackathon submission. To run the 
 git clone https://github.com/statsguysam/nanigpt.git
 cd nanigpt
 pip install -r requirements.txt
-jupyter notebook notebooks/03_gradio_demo.ipynb
+jupyter notebook notebooks/nanigpt_pipeline.ipynb
 ```
 
-Run the notebook sequence in order:
+`notebooks/nanigpt_pipeline.ipynb` reproduces the full training and deployment pipeline end-to-end on a free Colab T4: load Gemma 4 E4B with Unsloth, build the training dataset, run the LoRA fine-tune, save the adapter, push to Hugging Face, convert to GGUF via `llama.cpp`, publish the GGUF, and evaluate per-slot accuracy on the held-out test set. Total wall-clock is about 20 minutes. The output cells preserved in the notebook show the actual training loss curve, evaluation accuracy (418 of 420 slots correct), and Hugging Face upload confirmations from the original run.
 
-| Notebook | Purpose |
-|---|---|
-| `01_setup_and_inference.ipynb` | Load Gemma 4 E4B with Unsloth, run text and multimodal inference |
-| `02_function_calling.ipynb` | Wire 5 tools and validate the agent end-to-end |
-| `03_gradio_demo.ipynb` | Launch the caregiver-facing UI |
-| `04_voice_journal.ipynb` | Add audio input. Gemma 4 transcribes, then dispatches the agent |
-| `05_finetune_pill_detection.ipynb` | Reproduce the 78 to 99.5 percent LoRA fine-tuning result |
+The five function-calling tools and the local storage layer used at inference time live in `app/tools.py` and `app/storage.py` and are not duplicated in the notebook.
 
 ## Repository contents
 
@@ -70,15 +64,11 @@ nanigpt/
     storage.py           caregiver log store (in-memory; swap for SQLCipher in prod)
     __init__.py
   notebooks/
-    01_setup_and_inference.ipynb
-    02_function_calling.ipynb
-    03_gradio_demo.ipynb
-    04_voice_journal.ipynb
-    05_finetune_pill_detection.ipynb
+    nanigpt_pipeline.ipynb   full reproducible pipeline with preserved run outputs
   data/
     training/            200 synthetic pill organizer photos with ground-truth labels
     eval/                30 held-out evaluation photos
-    test_inputs/         Day 1 hand-tested OOD images
+    test_inputs/         original out-of-distribution images
     training_set.zip     bundled training and eval, easy Colab upload
   assets/
     finetune_result.png
@@ -99,7 +89,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Optional: re-run fine-tuning to reproduce the 99.5 percent result
-jupyter notebook notebooks/05_finetune_pill_detection.ipynb
+jupyter notebook notebooks/nanigpt_pipeline.ipynb
 ```
 
 ## Production deployment
